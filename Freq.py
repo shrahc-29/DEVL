@@ -15,5 +15,18 @@ def count(item)
 
 sort=sorted(freq.items(), key=count, reverse=True)
 
+top=sort[:10]
+
+word_list=[item[0] for item in top]
+count_list=[item[1] for item in top]
+
 for word, count in sort[:10]:
   print(f"{word} : {count}")
+
+
+import matplotlib.pyplot as plt
+
+plt.bar=(word_list, count_list)
+plt.xlabel=("Words")
+plt.ylabel=("Count")
+plt.show()
