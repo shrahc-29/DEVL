@@ -1,25 +1,52 @@
-employee = [
-    {"emp_id": 1, "name": "Charles", "dept": "F1", "salary": 45000, "year_joined": 1998, "H1": 65, "H2": 40},
-    {"emp_id": 2, "name": "Mom", "dept": "Bank", "salary": 43000, "year_joined": 1987, "H1": 60, "H2": 64},
-    {"emp_id": 3, "name": "Purva", "dept": "Stud", "salary": 15000, "year_joined": 2006, "H1": 85, "H2": 73},
-    {"emp_id": 4, "name": "Gargee", "dept": "Stud", "salary": 45800, "year_joined": 2006, "H1": 95, "H2": 75},
-    {"emp_id": 5, "name": "Carlos", "dept": "F1", "salary": 4500, "year_joined": 1998, "H1": 35, "H2": 20},
-    {"emp_id": 6, "name": "Shriya", "dept": "Stud", "salary": 94000, "year_joined": 2006,"H1": 98, "H2": 90},
-]
-
 import pandas as pd
 
-df = pd.DataFrame(employee)
-df["avg_rat"]=df[["H1","H2"]].mean(axis=1)
-print(df)
+volunteers = [
+    {"vid": 1, "name": "Aarav", "program": "Health", "hours": {"Q1": 50, "Q2": 60, "Q3": 55, "Q4": 65}, "city": "Pune", "year": 2023},
+    {"vid": 2, "name": "Diya", "program": "Education", "hours": {"Q1": 70, "Q2": 80, "Q3": 75, "Q4": 85}, "city": "Mumbai", "year": 2023},
+    {"vid": 3, "name": "Rohan", "program": "Environment", "hours": {"Q1": 40, "Q2": 45, "Q3": 50, "Q4": 55}, "city": "Delhi", "year": 2023},
+    {"vid": 4, "name": "Mira", "program": "Health", "hours": {"Q1": 65, "Q2": 70, "Q3": 75, "Q4": 80}, "city": "Pune", "year": 2024},
+    {"vid": 5, "name": "Kabir", "program": "Education", "hours": {"Q1": 90, "Q2": 85, "Q3": 88, "Q4": 92}, "city": "Mumbai", "year": 2024},
+    {"vid": 6, "name": "Isha", "program": "Environment", "hours": {"Q1": 55, "Q2": 60, "Q3": 58, "Q4": 62}, "city": "Delhi", "year": 2024},
+    {"vid": 7, "name": "Aarav", "program": "Health", "hours": {"Q1": 60, "Q2": 70, "Q3": 65, "Q4": 75}, "city": "Pune", "year": 2024},
+]
 
-sal=df.groupby("dept")["salary"].mean()
-print(sal)
+df=pd.DataFrame(volunteers)
 
-sort=df.nlargest(3,"salary")
-print(sort)
+df["Q1"] = [x["Q1"] for x in df["hours"]]
+df["Q2"] = [x["Q2"] for x in df["hours"]]
+df["Q3"] = [x["Q3"] for x in df["hours"]]
+df["Q4"] = [x["Q4"] for x in df["hours"]]
 
-above_60=(df["avg_rat"]>=60).sum()
-perc=(above_60/len(df)*100)
-print(f"Percentage: {perc}")
 
+
+total_hrs=[]
+avg_hrs=[]
+
+for i in range(len(df)):
+    total=df.loc[i,"Q1"]+df.loc[i,"Q2"]+df.loc[i,"Q3"]+df.loc[i,"Q4"]
+    avg=total/4
+    total_hrs.append(total)
+    avg_hrs.append(avg)
+
+df["total_hrs"]=total_hrs
+df["avg_hrs"]=avg_hrs
+
+
+
+prog=df.groupby("program")["avg_hrs"].mean()
+print(prog)
+
+n23=list(df[df["year"]==2023]["name"])
+n24=list(df[df["year"]==2024]["name"])
+
+retain=0
+
+for name in n23:
+    if name in n24:
+        retain=+1
+    
+if retain>0:
+    rate=(retain/len(n23))*100
+    print(rate)
+else:
+    print("0")
